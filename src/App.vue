@@ -17,6 +17,9 @@
       <div class="input-container">
         <input type="text" v-model="expression" placeholder="请输入表达式" @input="checkExpression">
       </div>
+      <div class="result-container" v-if="expression">
+        结果: {{ calculatedResult }}
+      </div>
     </main>
   </div>
 </template>
@@ -27,7 +30,7 @@ export default {
     return {
       numbers: [2, 4, 8, 64],
       expression: '',
-      isCheckingNumbers: false
+      calculatedResult: ''
     };
   },
   methods: {
@@ -36,34 +39,21 @@ export default {
       if (!allowedChars.test(this.expression)) {
         alert("表达式包含非法字符，请重新输入！");
         this.expression = this.expression.replace(/[^0-9+\-*/()\s]/g, '');
-        this.isCheckingNumbers = false;
       } else {
-        // 如果输入的是数字，设置标志为 true
-        if (/[0-9]/.test(this.expression.slice(-1))) {
-          this.isCheckingNumbers = true;
-        }
-
-        // 如果输入空格、运算符或括号，或者标志为 true，并且最后一个输入不是 backspace，则进行数字有效性检查
-        if ((/[+\-*/()\s]/.test(this.expression.slice(-1)) || this.isCheckingNumbers) && event.inputType !== 'deleteContentBackward') {
-          this.checkInvalidNumbers();
-          this.isCheckingNumbers = false;
-        }
-      }
-    },
-    checkInvalidNumbers() {
-      const usedNumbers = this.expression.match(/\d+/g) || [];
-      // 检查所有数字是否有效
-      for (const numberStr of usedNumbers) {
-        const number = parseInt(numberStr);
-        if (!this.numbers.includes(number)) {
-          alert(`无效数字: ${number}`);
-          return; // 发现无效数字，立即停止检查
-        }
+        this.calculateResult();
       }
     },
     isNumberUsed(number) {
       const regex = new RegExp(`\\b${number}\\b`);
       return regex.test(this.expression);
+    },
+    calculateResult() {
+      try {
+        // eslint-disable-next-line no-eval
+        this.calculatedResult = eval(this.expression); 
+      } catch (error) {
+        this.calculatedResult = '错误的表达式';
+      }
     }
   }
 };
@@ -117,5 +107,10 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+.result-container {
+  margin-top: 16px;
+  font-size: 20px;
 }
 </style>

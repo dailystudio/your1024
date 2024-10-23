@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <header class="header">
-      <h1>1024 游戏</h1>
+      <h1>1024 Game</h1>
     </header>
     <main class="main">
       <div class="numbers-container">
@@ -15,10 +15,14 @@
         </div>
       </div>
       <div class="input-container">
-        <input type="text" v-model="expression" placeholder="请输入表达式" @input="checkExpression">
+        <input type="text" v-model="expression" placeholder="Enter expression" @input="checkExpression">
+        <button @click="submit">Submit</button> 
       </div>
       <div class="result-container" v-if="expression">
-        结果: {{ calculatedResult }}
+        Result: {{ calculatedResult }}
+      </div>
+      <div class="time-taken" v-if="timeTaken">
+        Time taken: {{ timeTaken }} seconds
       </div>
     </main>
   </div>
@@ -28,16 +32,33 @@
 export default {
   data() {
     return {
-      numbers: [2, 4, 8, 64],
+      numbers: this.getRandomFactors(),
       expression: '',
-      calculatedResult: ''
+      calculatedResult: '',
+      startTime: new Date(), 
+      timeTaken: null
     };
   },
   methods: {
+    getRandomFactors() {
+      const factors = [2, 4, 8, 16, 32, 64, 128, 256];
+      const selectedFactors = [];
+
+      while (selectedFactors.length < 4) {
+        const randomIndex = Math.floor(Math.random() * factors.length);
+        const randomFactor = factors[randomIndex];
+
+        if (!selectedFactors.includes(randomFactor)) {
+          selectedFactors.push(randomFactor);
+        }
+      }
+
+      return selectedFactors;
+    },
     checkExpression(event) {
       const allowedChars = /^[0-9+\-*/()\s]+$/;
       if (!allowedChars.test(this.expression)) {
-        alert("表达式包含非法字符，请重新输入！");
+        alert("Expression contains invalid characters, please re-enter!");
         this.expression = this.expression.replace(/[^0-9+\-*/()\s]/g, '');
       } else {
         this.calculateResult();
@@ -52,7 +73,15 @@ export default {
         // eslint-disable-next-line no-eval
         this.calculatedResult = eval(this.expression); 
       } catch (error) {
-        this.calculatedResult = '错误的表达式';
+        this.calculatedResult = 'Invalid expression';
+      }
+    },
+    submit() {
+      if (this.calculatedResult === 1024) {
+        const endTime = new Date();
+        this.timeTaken = Math.round((endTime - this.startTime) / 1000); 
+      } else {
+        alert("Incorrect expression. Please try again.");
       }
     }
   }

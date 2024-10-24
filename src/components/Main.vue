@@ -1,6 +1,7 @@
 <template>
     <v-app class="oms-app">
       <v-main class="main">
+        <h1>Your 1024</h1>
         <v-row class="numbers-container">
           <v-col
             v-for="number in numbers"
@@ -22,10 +23,14 @@
             single-line
             @input="checkExpression"
         ></v-text-field>
-        <v-btn variant="outlined" class="submit" @click="submit">Submit</v-btn>
-        <div class="result-container" v-if="expression">
-          Result: {{ calculatedResult }}
+        <v-btn
+            :disabled="calculatedResult !== 1024"
+            variant="outlined" class="submit"
+            @click="submit">Submit</v-btn>
+        <div class="result-container" v-if="calculatedResult !== 0">
+          {{ calculatedResult }}
         </div>
+
         <div class="time-taken" v-if="timeTaken">
           Time taken: {{ timeTaken }} seconds
         </div>
@@ -105,6 +110,7 @@ export default {
         this.showFooter = true;
       }
     }
+
   },
   methods: {
 
@@ -138,10 +144,9 @@ export default {
     },
     calculateResult() {
       try {
-        // eslint-disable-next-line no-eval
         this.calculatedResult = eval(this.expression);
       } catch (error) {
-        this.calculatedResult = 'Invalid expression';
+        this.calculatedResult = 0;
       }
     },
     submit() {
@@ -161,6 +166,9 @@ export default {
   margin: 0;
 }
 
+h1 {
+  margin: 30px;
+}
 .main {
   padding: 16px;
 }
@@ -195,6 +203,9 @@ export default {
   margin: 16px;
 }
 
+.time-taken {
+  margin: 16px;
+}
 
 .result-container {
   margin-top: 16px;

@@ -1,0 +1,111 @@
+//@import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+.bottom-place-holder {
+  height: 50px;
+}
+
+.step-image {
+  width: 100%;
+  height: 150px;
+  object-fit: contain !important;
+}
+
+.bottom-place-holder {
+  height: 50px;
+}
+
+.countdown {
+  font-size: 12px;
+}
+
+
+.more-btn-layout {
+  margin: -12px 0 4px !important;
+}
+
+.more-btn-layout .v-btn {
+  font-size: 10px;
+  padding: 0 10px !important;
+  min-width: 40px;
+}
+
+.app-name {
+  margin: 0 ;
+}
+
+.app-name .col {
+  padding: 12px 0 0 !important;
+}
+
+.app-name p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.app-name-1 {
+  color: var(--primary-color);
+}
+
+.app-logo {
+  flex-grow: 0;
+}
+
+.app-name img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin: 10px 0;
+}
+
+.customization .v-input {
+  margin: 0 16px;
+}
+
+.customization .v-checkbox :deep(.v-selection-control)  {
+  min-height: 20px !important;
+}
+
+.customization .v-slider {
+  margin: 6px 36px !important;
+}
+
+.customization .option-title {
+  margin: 0 0 -16px;
+}
+
+.customization .option-label {
+  margin: 0 24px 24px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.customization .option-title :deep(label) {
+  color: black;
+  opacity: unset;
+  font-weight: bold;
+  font-size: 18px !important;
+}
+
+.customization .chip-text {
+  word-break: break-all;
+}
+
+.shrink-image-container {
+  overflow: hidden; /* Ensure that the image is clipped when it enlarges */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px !important;
+}
+
+.shrink-on-hover {
+  border-radius: 8px !important;
+  width: 100%; /* Ensure the image fits the container initially */
+  height: 100%;
+  transform: scale(1.2); /* Shrink the image */
+  transition: transform 0.8s ease; /* Smooth transition */
+}
+
+.shrink-on-hover:hover {
+  transform: scale(1); /* Shrink the image */
+}

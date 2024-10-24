@@ -1,5 +1,5 @@
 {
-  "name": "myapp",
+  "name": "your1024",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,10 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.10"
+    "vue": "^3.5.10",
+    "vue-i18n": "^9.14.1",
+    "vue-router": "^4.0.13",
+    "vuetify": "^3.7.0-beta.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "sass": "^1.71.1",
+    "vite-plugin-vuetify": "^2.0.3"
   }
 }

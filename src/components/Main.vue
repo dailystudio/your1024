@@ -228,6 +228,8 @@ h1 {
 .number-card .active {
   color: white;
   background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  font-weight: bold;
 }
 
 .expression-input {

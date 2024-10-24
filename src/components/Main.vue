@@ -1,7 +1,7 @@
 <template>
     <v-app class="oms-app">
       <v-main class="main">
-        <h1>Your 1024</h1>
+        <h1>{{ $t('message.mainPageTitle') }}</h1>
         <v-row class="numbers-container">
           <v-col
             v-for="number in numbers"
@@ -21,16 +21,14 @@
             class="expression-input"
             v-model="expression"
             single-line
+            persistent-hint
+            :hint="inputHint"
             @input="filterExpression"
         ></v-text-field>
         <v-btn
             :disabled="calculatedResult !== 1024 || !isAllNumberUsed()"
             variant="outlined" class="submit"
-            @click="submit">Submit</v-btn>
-        <div class="result-container" v-if="calculatedResult !== 0">
-          {{ calculatedResult }}
-        </div>
-
+            @click="submit">{{ $t('message.commonLabelSubmit')}}</v-btn>
         <div class="time-taken" v-if="timeTaken">
           Time taken: {{ timeTaken }} seconds
         </div>
@@ -49,13 +47,15 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n';
+
 export default {
   data() {
     return {
       fullPath: this.$route.fullPath,
       query: this.$route.query,
       theme: 'light',
-      locale: 'en',
+      locale: navigator.language,
 
       numbers: this.getRandomFactors(),
       expression: '',
@@ -64,6 +64,24 @@ export default {
       timeTaken: null
     };
   },
+
+  setup() {
+
+  },
+
+  computed: {
+    inputHint() {
+      const {t} = useI18n();
+
+      let hint = '';
+      if (this.calculatedResult && this.calculatedResult !== 0) {
+        hint = `${t('message.mainInputHint')}${this.calculatedResult}`
+      }
+
+      return hint;
+    }
+  },
+
   mounted: function () {
     console.log(`locale: ${JSON.stringify(this.$route.query.locale)}`);
     console.log(`theme: ${JSON.stringify(this.$route.query.theme)}`);
@@ -133,7 +151,7 @@ export default {
       return selectedFactors;
     },
     filterExpression(event) {
-      const allowedChars = /^[0-9+\-*/()\s]+$/;
+      const allowedChars = /^[0-9+\-*/()^\s]+$/;
       if (!allowedChars.test(this.expression)) {
         this.expression = this.expression.replace(/[^0-9+\-*/()\s]/g, '');
       }
@@ -145,7 +163,6 @@ export default {
     isAllNumberUsed() {
       for (let i = 0; i < this.numbers.length; i++) {
         let used = this.isNumberUsed( this.numbers[i])
-        console.log(`[${this.numbers[i]} is ${used}`)
         if (!used) {
           return false;
         }
@@ -155,7 +172,7 @@ export default {
     },
     calculateResultOfExp() {
       try {
-        this.calculatedResult = eval(this.expression);
+        this.calculatedResult = eval(this.expression.replace(/\^/g, "**"));
       } catch (error) {
         this.calculatedResult = 0;
       }
@@ -177,6 +194,13 @@ export default {
   margin: 0;
 }
 
+:deep(.v-messages__message) {
+  color: var(--primary-color) !important;
+  font-size: 16px;
+  text-align: left;
+  margin: 8px 0
+}
+
 h1 {
   margin: 30px;
 }
@@ -190,10 +214,6 @@ h1 {
 
 .v-col {
   padding: 0;
-}
-
-
-.number-card {
 }
 
 .number-card__number {
@@ -212,6 +232,10 @@ h1 {
 
 .expression-input {
   margin: 16px;
+}
+
+.expression-input :deep(input) {
+  font-size: 22px;
 }
 
 .time-taken {

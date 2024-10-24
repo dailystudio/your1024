@@ -22,11 +22,19 @@ const router = createRouter({
 const messages = {
     en: {
         message: {
+            mainPageTitle: "Your 1024",
+            mainInputHint: "Current value: ",
+
+            commonLabelSubmit: "Submit",
             commonFooterCopyright: "Daily Studio. Copyright",
         }
     },
-    cn: {
+    zh: {
         message: {
+            mainPageTitle: "你的1024",
+            mainInputHint: "当前结果： ",
+
+            commonLabelSubmit: "提交",
             commonFooterCopyright: "Daily Studio. 版权所有"
         }
     }
@@ -34,7 +42,7 @@ const messages = {
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'en', // set locale
+    locale: navigator.language, // set locale
     messages: messages,
 })
 

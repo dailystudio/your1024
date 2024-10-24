@@ -21,10 +21,10 @@
             class="expression-input"
             v-model="expression"
             single-line
-            @input="checkExpression"
+            @input="filterExpression"
         ></v-text-field>
         <v-btn
-            :disabled="calculatedResult !== 1024"
+            :disabled="calculatedResult !== 1024 || !isAllNumberUsed()"
             variant="outlined" class="submit"
             @click="submit">Submit</v-btn>
         <div class="result-container" v-if="calculatedResult !== 0">
@@ -59,7 +59,7 @@ export default {
 
       numbers: this.getRandomFactors(),
       expression: '',
-      calculatedResult: '',
+      calculatedResult: 0,
       startTime: new Date(),
       timeTaken: null
     };
@@ -94,6 +94,9 @@ export default {
   },
 
   watch: {
+    expression() {
+      this.calculateResultOfExp()
+    },
     theme(theme) {
       console.log(`theme changed: ${theme}`);
       document.documentElement.setAttribute(
@@ -129,20 +132,28 @@ export default {
 
       return selectedFactors;
     },
-    checkExpression(event) {
+    filterExpression(event) {
       const allowedChars = /^[0-9+\-*/()\s]+$/;
       if (!allowedChars.test(this.expression)) {
-        alert("Expression contains invalid characters, please re-enter!");
         this.expression = this.expression.replace(/[^0-9+\-*/()\s]/g, '');
-      } else {
-        this.calculateResult();
       }
     },
     isNumberUsed(number) {
       const regex = new RegExp(`\\b${number}\\b`);
       return regex.test(this.expression);
     },
-    calculateResult() {
+    isAllNumberUsed() {
+      for (let i = 0; i < this.numbers.length; i++) {
+        let used = this.isNumberUsed( this.numbers[i])
+        console.log(`[${this.numbers[i]} is ${used}`)
+        if (!used) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    calculateResultOfExp() {
       try {
         this.calculatedResult = eval(this.expression);
       } catch (error) {
